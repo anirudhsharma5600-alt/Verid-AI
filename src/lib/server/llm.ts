@@ -12,7 +12,7 @@ function getProvider(): LLMProvider {
 
 function getModel(provider: LLMProvider): string {
   if (process.env.LLM_MODEL) return process.env.LLM_MODEL;
-  return provider === "anthropic" ? "claude-3-5-sonnet-20241022" : "gemini-2.0-flash";
+  return provider === "anthropic" ? "claude-3-5-sonnet-20241022" : "gemini-3.8-flash";
 }
 
 // ─── Prompts ────────────────────────────────────
