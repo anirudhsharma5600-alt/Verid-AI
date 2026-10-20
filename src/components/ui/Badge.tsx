@@ -1,37 +1,31 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "secondary" | "success" | "outline";
+export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "yellow" | "success" | "danger" | "outline";
 }
 
 export function Badge({
   className,
   variant = "default",
-  children,
   ...props
 }: BadgeProps) {
   const variants = {
-    default:
-      "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-transparent",
-    secondary:
-      "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-transparent",
-    success:
-      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-transparent",
-    outline:
-      "border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300",
+    default: "bg-zinc-800 text-zinc-200 border-zinc-700",
+    yellow: "bg-[#FFD400] text-black font-extrabold border-[#FFD400]",
+    success: "bg-emerald-950 text-emerald-300 border-emerald-700",
+    danger: "bg-red-950 text-red-300 border-red-700",
+    outline: "text-zinc-200 border-zinc-700",
   };
 
   return (
-    <span
+    <div
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold transition-colors",
         variants[variant],
         className
       )}
       {...props}
-    >
-      {children}
-    </span>
+    />
   );
 }
