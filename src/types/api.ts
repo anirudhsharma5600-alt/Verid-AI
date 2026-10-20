@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+// ─── Shared API Contract ─── (written by Anirudh, read-only for Ayush)
+
+// POST /api/describe
+export interface DescribeRequest {
+  image: string; // base64 jpeg, NO "data:" prefix
+  mode: "describe" | "read";
+  lang: "en" | "hi";
+}
+
+=======
 // ─── Vision Assistant — Shared API Contract ───
 // Written by Anirudh (backend). Read-only for Ayush (frontend).
 // Both branches import from "@/types/api".
@@ -21,21 +32,39 @@ export interface DescribeRequest {
 }
 
 /** 200 response from /api/describe */
+>>>>>>> 487757b4aba9ef35aac004dd409086a1aa3d44eb
 export interface DescribeResponse {
   text: string;
 }
 
+<<<<<<< HEAD
+// GET /api/geocode?q=<text>&lat=<num>&lon=<num>
+=======
 // ────────────────────────────────────────────────
 // GET /api/geocode?q=<text>&lat=<num>&lon=<num>
 // ────────────────────────────────────────────────
 
 /** 200 response from /api/geocode */
+>>>>>>> 487757b4aba9ef35aac004dd409086a1aa3d44eb
 export interface GeocodeResponse {
   lat: number;
   lon: number;
   name: string;
 }
 
+<<<<<<< HEAD
+// GET /api/route?fromLat&fromLon&toLat&toLon
+export interface RouteStep {
+  type: string;
+  modifier?: string;
+  name: string;
+  distance: number;
+  lat: number;
+  lon: number;
+}
+
+export interface RouteResponse {
+=======
 // ────────────────────────────────────────────────
 // GET /api/route?fromLat&fromLon&toLat&toLon
 // ────────────────────────────────────────────────
@@ -59,10 +88,20 @@ export interface RouteStep {
 /** 200 response from /api/route */
 export interface RouteResponse {
   /** Total distance in metres */
+>>>>>>> 487757b4aba9ef35aac004dd409086a1aa3d44eb
   distance: number;
   steps: RouteStep[];
 }
 
+<<<<<<< HEAD
+// Error shapes
+export interface ApiError {
+  error: "bad_request" | "busy" | "upstream" | "not_found";
+}
+
+export type Lang = "en" | "hi";
+export type DescribeMode = "describe" | "read";
+=======
 // ────────────────────────────────────────────────
 // Error envelope (all endpoints)
 // ────────────────────────────────────────────────
@@ -77,3 +116,4 @@ export type ApiErrorCode =
 export interface ApiError {
   error: ApiErrorCode;
 }
+>>>>>>> 487757b4aba9ef35aac004dd409086a1aa3d44eb
