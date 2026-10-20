@@ -6,8 +6,14 @@ import { upstreamSignal } from "./errors";
 
 export type LLMProvider = "gemini" | "anthropic";
 
-const PROVIDER = (process.env.LLM_PROVIDER ?? "gemini") as LLMProvider;
-const MODEL = process.env.LLM_MODEL ?? "gemini-2.0-flash";
+function getProvider(): LLMProvider {
+  return (process.env.LLM_PROVIDER?.toLowerCase() === "anthropic" ? "anthropic" : "gemini");
+}
+
+function getModel(provider: LLMProvider): string {
+  if (process.env.LLM_MODEL) return process.env.LLM_MODEL;
+  return provider === "anthropic" ? "claude-3-5-sonnet-20241022" : "gemini-2.0-flash";
+}
 
 // ─── Prompts ────────────────────────────────────
 
@@ -44,7 +50,8 @@ async function callGemini(
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+  const model = getModel("gemini");
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const systemPrompt = getSystemPrompt(mode, lang);
   const langInstr = getLangInstruction(lang);
@@ -105,7 +112,7 @@ async function callAnthropic(
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY is not set");
 
-  const model = MODEL || "claude-sonnet-4-20250514";
+  const model = getModel("anthropic");
   const systemPrompt = getSystemPrompt(mode, lang);
   const langInstr = getLangInstruction(lang);
 
@@ -179,7 +186,8 @@ export async function describeImage(
   mode: "describe" | "read",
   lang: "en" | "hi"
 ): Promise<string> {
-  if (PROVIDER === "anthropic") {
+  const provider = getProvider();
+  if (provider === "anthropic") {
     return callAnthropic(base64Image, mode, lang);
   }
   return callGemini(base64Image, mode, lang);
