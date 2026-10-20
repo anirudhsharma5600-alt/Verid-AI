@@ -17,7 +17,7 @@ export function getClientIp(request: Request): string {
   return "127.0.0.1";
 }
 
-/** Shared 8-second AbortSignal for upstream calls. */
-export function upstreamSignal(): AbortSignal {
-  return AbortSignal.timeout(8_000);
+/** Shared AbortSignal for upstream calls. Defaults to 15s. */
+export function upstreamSignal(timeoutMs: number = 15_000): AbortSignal {
+  return AbortSignal.timeout(timeoutMs);
 }

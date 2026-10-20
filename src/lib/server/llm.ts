@@ -79,14 +79,25 @@ async function callGemini(
     },
   };
 
-  const res = await fetch(url, {
+  let res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-    signal: upstreamSignal(),
+    signal: upstreamSignal(20_000),
   });
 
-  if (res.status === 429) {
+  // Auto-retry once on temporary 503 spikes
+  if (res.status === 503) {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: upstreamSignal(20_000),
+    });
+  }
+
+  if (res.status === 429 || res.status === 503) {
     throw new UpstreamBusyError();
   }
 
@@ -146,7 +157,7 @@ async function callAnthropic(
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify(body),
-    signal: upstreamSignal(),
+    signal: upstreamSignal(20_000),
   });
 
   if (res.status === 429) {
